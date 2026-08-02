@@ -1,5 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
+import proxy from "express-http-proxy";
 dotenv.config();
 
 const app = express();
@@ -11,6 +12,8 @@ app.get("/", async(req,res) => {
         message:"Hello From Gateway"
     })
 })
+
+app.use("/api/auth", proxy(process.env.AUTH_API_URL))
 
 app.listen(PORT, () => {
     console.log(`Gateway is started at ${PORT}`)
