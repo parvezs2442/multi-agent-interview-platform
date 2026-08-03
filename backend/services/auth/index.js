@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cookieParser)
+app.use(cookieParser())
 const PORT = process.env.PORT || 3001
 
 app.get("/", async(req,res) => {

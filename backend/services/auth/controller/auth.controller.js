@@ -5,55 +5,63 @@ import crypto from "crypto"
 import redis from "../../../shared/redis/redis.js";
 
  
-export const GoogleAuth = async(req,res) => {
-    try{
-        //fetch token and verify token using firebase
-        const {token} = req.body;
+export const GoogleAuth = async (req, res) => {
+    console.log("1. Controller entered");
+
+    try {
+        const { token } = req.body;
+        console.log("2. Token received");
+
         const decoded = await getAuth(app).verifyIdToken(token);
+        console.log("3. Token verified");
 
-        //check existing user
         let user = await User.findOne({
-            firebaseUid:decoded.uid
-        })
+            firebaseUid: decoded.uid,
+        });
+        console.log("4. User checked");
 
-        //create a user if no user
-        if(!user){
+        if (!user) {
             user = await User.create({
-                firebaseUid:decioded.uid,
-                name:decoded.name,
-                email:decoded.email
-            })
+                firebaseUid: decoded.uid,
+                name: decoded.name,
+                email: decoded.email,
+            });
+            console.log("5. User created");
         }
 
-        //generate session id and send in cookie
+        console.log("6. Before Redis");
+
         const sessionId = crypto.randomUUID();
-        
-        await redis.set(`session:${sessionId}`, JSON.stringify({
-            userId:user._id,
-            name:user.name,
-            email:user.email,
-            interviewCoin:user.interviewCoin
-        }), "EX", 7*24*60*60*1000)
-        
+
+        await redis.set(
+            `session:${sessionId}`,
+            JSON.stringify({ userId: user._id }),
+            "EX",
+            604800
+        );
+
+        console.log("7. Redis Done");
+
         res.cookie("sessionId", sessionId, {
-            httponly:true,
-            maxAge: 7*24*60*60*1000
-        })
+            httpOnly: true,
+            maxAge: 604800000,
+        });
 
-        return res.status(201).json({
-            success:true,
-            user
-        })
+        console.log("8. Sending response");
 
+        return res.status(200).json({
+            success: true,
+            user,
+        });
 
-    }catch(error){
-        console.log(error)
-        return res.status(201).json({
-            success:false,
-            message:"Something went wrong"
-        })
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            success: false,
+            message: err.message,
+        });
     }
-}  
+}; 
 
 export const Logout = async(req,res) => {
     try{
@@ -74,3 +82,8 @@ export const Logout = async(req,res) => {
         })
     }
 }
+
+
+
+
+

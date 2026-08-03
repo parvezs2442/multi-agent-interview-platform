@@ -1,6 +1,60 @@
+import { signInWithPopup } from "firebase/auth";
 import { X } from "lucide-react";
+import { auth, provider } from "../utilis/firebase.js";
+import api from "../utilis/axios.js";
 
 const LoginModal = ({ closeModal }) => {
+
+export const GoogleAuth = async (req, res) => {
+    console.log("1");
+
+    try {
+        const { token } = req.body;
+        console.log("2");
+
+        const decoded = await getAuth(app).verifyIdToken(token);
+        console.log("3");
+
+        let user = await User.findOne({
+            firebaseUid: decoded.uid
+        });
+        console.log("4");
+
+        if (!user) {
+            user = await User.create({
+                firebaseUid: decoded.uid,
+                name: decoded.name,
+                email: decoded.email
+            });
+        }
+
+        console.log("5");
+
+        const sessionId = crypto.randomUUID();
+
+        await redis.set(
+            `session:${sessionId}`,
+            JSON.stringify({ userId: user._id }),
+            "EX",
+            604800
+        );
+
+        console.log("6");
+
+        return res.status(200).json({
+            success: true,
+            user
+        });
+
+    } catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+}
   return (
 
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -25,6 +79,7 @@ const LoginModal = ({ closeModal }) => {
           </p>
 
           <button
+            onClick={handleGoogleAuth}
             className="mt-8 flex w-full items-center justify-center gap-3 rounded-xl bg-[#262626] py-4 transition hover:bg-[#323232]"
           >
             <img

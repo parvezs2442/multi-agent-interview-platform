@@ -2,8 +2,18 @@ import express from "express"
 import dotenv from "dotenv"
 import proxy from "express-http-proxy";
 dotenv.config();
+import cors from "cors"
+import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(express.json())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
+
+app.use(cookieParser())
+
 const PORT = process.env.PORT || 3000
 
 app.get("/", async(req,res) => {
@@ -12,6 +22,11 @@ app.get("/", async(req,res) => {
         message:"Hello From Gateway"
     })
 })
+
+app.use((req, res, next) => {
+    console.log(req.method, req.originalUrl);
+    next();
+});
 
 app.use("/api/auth", proxy(process.env.AUTH_API_URL))
 
