@@ -33,3 +33,6 @@ coverage/
 
 # cache
 .cache/
+
+.serviceAccountKey.json
+backend/services/auth/serviceAccountKey.json
