@@ -1,9 +1,11 @@
 import { signInWithPopup } from "firebase/auth";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { auth, provider } from "../utilis/firebase.js";
 import api from "../utilis/axios.js";
 
-const LoginModal = ({ closeModal }) => {
+const LoginModal = ({ closeModal, onLoginSuccess }) => {
+  const navigate = useNavigate();
 
   const handleGoogleAuth = async () => {
     try {
@@ -21,10 +23,8 @@ const LoginModal = ({ closeModal }) => {
       console.log(response.data);
 
       if (response.data.success) {
-        closeModal();
-
-        // Reload so App.jsx runs getCurrentUser() again
-        window.location.reload();
+        onLoginSuccess(response.data.user);
+        navigate("/dashboard");
       }
 
     } catch (error) {

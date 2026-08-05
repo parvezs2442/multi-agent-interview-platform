@@ -8,6 +8,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cookieParser())
+
+app.use((req, res, next) => {
+    console.log("Auth Service received:", req.method, req.url);
+    next();
+});
+
 const PORT = process.env.PORT || 3001
 
 app.get("/", async(req,res) => {

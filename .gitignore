@@ -36,3 +36,4 @@ coverage/
 
 .serviceAccountKey.json
 backend/services/auth/serviceAccountKey.json
+mongodb_data/

@@ -43,8 +43,8 @@ const App = () => {
     );
   }
 
-  // Show Navbar on homepage / landing page and hide on the dashboard
-  const showNavbar = location.pathname !== "/dashboard";
+  // Show Navbar on all pages
+  const showNavbar = true;
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-200">
@@ -59,9 +59,7 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={
-              user ? <Navigate to="/dashboard" replace /> : <Navigate to="/home" replace />
-            }
+            element={<Navigate to="/home" replace />}
           />
           <Route
             path="/home"
@@ -83,7 +81,13 @@ const App = () => {
       </main>
 
       {showLogin && (
-        <LoginModal closeModal={() => setShowLogin(false)} />
+        <LoginModal
+          closeModal={() => setShowLogin(false)}
+          onLoginSuccess={(loggedInUser) => {
+            setUser(loggedInUser);
+            setShowLogin(false);
+          }}
+        />
       )}
     </div>
   );

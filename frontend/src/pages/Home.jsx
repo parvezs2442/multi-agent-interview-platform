@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, FileText, Mic, BarChart3, Map, Coins, LogOut, ChevronRight } from "lucide-react";
 
 // Helper function to map value (0 to 100) and angle to coordinates (cx, cy)
@@ -115,6 +116,8 @@ const RadarChart = ({ data, size = 180 }) => {
 };
 
 const Home = ({ user, openLogin }) => {
+  const navigate = useNavigate();
+
   const getUserInitials = (name) => {
     if (!name) return "U";
     const parts = name.split(" ");
@@ -152,10 +155,10 @@ const Home = ({ user, openLogin }) => {
 
         {/* CTA Button */}
         <button
-          onClick={openLogin}
+          onClick={user ? () => navigate("/dashboard") : openLogin}
           className="flex items-center gap-3 bg-[#18181b] hover:bg-[#27272a] text-white px-8 py-4 rounded-xl font-bold transition duration-300 shadow-xl shadow-black/10 text-base mb-20 select-none group cursor-pointer"
         >
-          <span>Get Started For Free</span>
+          <span>Get Started</span>
           <ArrowRight size={18} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
         </button>
 
@@ -239,7 +242,7 @@ const Home = ({ user, openLogin }) => {
             <main className="flex-1 bg-[#09090b] p-6 overflow-hidden flex flex-col justify-start">
               <span className="text-[10px] text-gray-500 font-semibold uppercase block leading-none mb-1">Overview</span>
               <h2 className="text-lg font-extrabold text-white flex items-center gap-1.5 mb-5 leading-none">
-                Hello, {user ? user.name.split(" ")[0] : "User"} 👋
+                Hello, {user && user.name ? user.name.split(" ")[0] : "User"} 👋
               </h2>
 
               {/* Stats Box Grid */}

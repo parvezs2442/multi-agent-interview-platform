@@ -22,7 +22,7 @@ export const GoogleAuth = async (req, res) => {
     if (!user) {
       user = await User.create({
         firebaseUid: decoded.uid,
-        name: decoded.name,
+        name: decoded.name || decoded.email.split("@")[0] || "User",
         email: decoded.email,
       });
       console.log("5. User created");
@@ -34,7 +34,12 @@ export const GoogleAuth = async (req, res) => {
 
     await redis.set(
       `session:${sessionId}`,
-      JSON.stringify({ userId: user._id }),
+      JSON.stringify({ 
+        userId: user._id,
+        name: user.name,
+        email: user.email,
+        interviewCoin: user.interviewCoin
+      }),
       "EX",
       604800,
     );

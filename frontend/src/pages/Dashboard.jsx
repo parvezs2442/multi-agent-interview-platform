@@ -257,7 +257,7 @@ const Dashboard = ({ user }) => {
   );
 
   return (
-    <div className="min-h-screen flex bg-[#09090b] text-white overflow-hidden font-sans">
+    <div className="min-h-[calc(100vh-80px)] h-[calc(100vh-80px)] flex bg-[#09090b] text-white overflow-hidden font-sans">
       
       {/* Desktop Sidebar */}
       <aside 
@@ -267,26 +267,26 @@ const Dashboard = ({ user }) => {
       >
         {sidebarContent(false)}
       </aside>
-
+ 
       {/* Mobile Drawer Backdrop */}
       {mobileSidebarOpen && (
         <div 
           onClick={() => setMobileSidebarOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-x-0 bottom-0 top-20 bg-black/60 backdrop-blur-sm z-40 md:hidden"
         />
       )}
-
+ 
       {/* Mobile Sidebar */}
       <aside 
-        className={`fixed top-0 bottom-0 left-0 w-64 bg-[#121214] border-r border-white/5 z-50 transition-transform duration-300 md:hidden ${
+        className={`fixed top-20 bottom-0 left-0 w-64 bg-[#121214] border-r border-white/5 z-50 transition-transform duration-300 md:hidden ${
           mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {sidebarContent(true)}
       </aside>
-
+ 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-screen overflow-y-auto bg-[#09090b]">
+      <div className="flex-1 flex flex-col h-full overflow-y-auto bg-[#09090b]">
         
         {/* Mobile Header Bar */}
         <header className="h-16 border-b border-white/5 px-6 flex items-center justify-between md:hidden shrink-0">
