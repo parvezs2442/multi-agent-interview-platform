@@ -7,18 +7,28 @@ const LoginModal = ({ closeModal }) => {
 
   const handleGoogleAuth = async () => {
     try {
+      // Google Sign In
       const result = await signInWithPopup(auth, provider);
+
+      // Firebase Token
       const token = await result.user.getIdToken();
+
+      // Backend Login
       const response = await api.post("/api/auth/login", {
         token,
       });
+
       console.log(response.data);
-      // Login successful -> Close Modal
+
       if (response.data.success) {
         closeModal();
+
+        // Reload so App.jsx runs getCurrentUser() again
+        window.location.reload();
       }
+
     } catch (error) {
-      console.error(error);
+      console.error("Login Error:", error);
     }
   };
 
@@ -35,7 +45,6 @@ const LoginModal = ({ closeModal }) => {
         </button>
 
         <div className="p-8">
-
           <h2 className="text-3xl font-bold text-center">
             Sign In to FresherAI
           </h2>
@@ -56,7 +65,6 @@ const LoginModal = ({ closeModal }) => {
 
             Continue with Google
           </button>
-
         </div>
 
         <div className="border-t border-white/10 py-4 text-center text-xs text-gray-500">
@@ -64,7 +72,6 @@ const LoginModal = ({ closeModal }) => {
         </div>
 
       </div>
-
     </div>
   );
 };

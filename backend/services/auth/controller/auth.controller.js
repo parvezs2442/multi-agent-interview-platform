@@ -38,6 +38,9 @@ export const GoogleAuth = async (req, res) => {
       "EX",
       604800,
     );
+   const check = await redis.get(`session:${sessionId}`);
+console.log("✅ Saved Session:", check);
+console.log("✅ Session ID:", sessionId);
 
     console.log("7. Redis Done");
 
@@ -63,11 +66,11 @@ export const GoogleAuth = async (req, res) => {
 
 export const Logout = async (req, res) => {
   try {
-    const sessionId = req.cookies?.session;
+    const sessionId = req.cookies?.sessionId;
     if (sessionId) {
       await redis.del(`session:${sessionId}`);
     }
-    res.clearCookie("session");
+    res.clearCookie("sessionId");
 
     return res.status(200).json({
       success: true,

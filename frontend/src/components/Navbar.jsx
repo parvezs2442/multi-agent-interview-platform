@@ -1,11 +1,22 @@
 import { NavLink } from "react-router-dom";
+import api from "../utilis/axios.js";
 
 const navItems = [
   { title: "Home", path: "/home" },
   { title: "Dashboard", path: "/dashboard" },
 ];
 
-const Navbar = ({ openLogin }) => {
+const Navbar = ({ user, openLogin }) => {
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/api/auth/logout");
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 backdrop-blur-xl bg-[#050816]/70">
 
@@ -33,12 +44,35 @@ const Navbar = ({ openLogin }) => {
           ))}
         </nav>
 
-        <button
-          onClick={openLogin}
-          className="rounded-xl bg-cyan-500 px-5 py-2 font-semibold text-black hover:scale-105 duration-300"
-        >
-          Sign In
-        </button>
+        {user ? (
+          <div className="flex items-center gap-4">
+
+            <div className="text-right">
+              <p className="text-sm font-semibold">
+                {user.name || "User"}
+              </p>
+
+              <p className="text-xs text-gray-400">
+                {user.email || ""}
+              </p>
+            </div>
+
+            <button
+              onClick={handleLogout}
+              className="rounded-xl bg-red-500 px-5 py-2 font-semibold text-white hover:scale-105 duration-300"
+            >
+              Logout
+            </button>
+
+          </div>
+        ) : (
+          <button
+            onClick={openLogin}
+            className="rounded-xl bg-cyan-500 px-5 py-2 font-semibold text-black hover:scale-105 duration-300"
+          >
+            Sign In
+          </button>
+        )}
 
       </div>
 

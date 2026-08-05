@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", proxy(process.env.AUTH_API_URL))
-app.use("/api/me",isAuth,  getCurrentUser)
+app.get("/api/me",isAuth,  getCurrentUser)
 
 app.listen(PORT, () => {
     console.log(`Gateway is started at ${PORT}`)

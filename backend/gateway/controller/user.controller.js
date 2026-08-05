@@ -1,4 +1,4 @@
-import user from "../middleware/isAuth.js"
+import { isAuth } from "../middleware/isAuth.js"
 
 export const getCurrentUser = async(req,res) => {
     try{
