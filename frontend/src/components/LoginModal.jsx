@@ -5,58 +5,24 @@ import api from "../utilis/axios.js";
 
 const LoginModal = ({ closeModal }) => {
 
-export const GoogleAuth = async (req, res) => {
-    console.log("1");
-
+  const handleGoogleAuth = async () => {
     try {
-        const { token } = req.body;
-        console.log("2");
-
-        const decoded = await getAuth(app).verifyIdToken(token);
-        console.log("3");
-
-        let user = await User.findOne({
-            firebaseUid: decoded.uid
-        });
-        console.log("4");
-
-        if (!user) {
-            user = await User.create({
-                firebaseUid: decoded.uid,
-                name: decoded.name,
-                email: decoded.email
-            });
-        }
-
-        console.log("5");
-
-        const sessionId = crypto.randomUUID();
-
-        await redis.set(
-            `session:${sessionId}`,
-            JSON.stringify({ userId: user._id }),
-            "EX",
-            604800
-        );
-
-        console.log("6");
-
-        return res.status(200).json({
-            success: true,
-            user
-        });
-
-    } catch (err) {
-        console.error(err);
-
-        return res.status(500).json({
-            success: false,
-            message: err.message
-        });
+      const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      const response = await api.post("/api/auth/login", {
+        token,
+      });
+      console.log(response.data);
+      // Login successful -> Close Modal
+      if (response.data.success) {
+        closeModal();
+      }
+    } catch (error) {
+      console.error(error);
     }
-}
-  return (
+  };
 
+  return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
 
       <div className="relative w-[420px] rounded-3xl border border-white/10 bg-[#151515] shadow-2xl">
@@ -85,7 +51,7 @@ export const GoogleAuth = async (req, res) => {
             <img
               src="https://www.svgrepo.com/show/475656/google-color.svg"
               className="h-6"
-              alt=""
+              alt="Google"
             />
 
             Continue with Google
@@ -100,7 +66,6 @@ export const GoogleAuth = async (req, res) => {
       </div>
 
     </div>
-
   );
 };
 
