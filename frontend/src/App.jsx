@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -10,6 +10,7 @@ const App = () => {
   const [showLogin, setShowLogin] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
     const getUser = async () => {
@@ -42,19 +43,36 @@ const App = () => {
     );
   }
 
+  // Show Navbar on homepage / landing page and hide on the dashboard
+  const showNavbar = location.pathname !== "/dashboard";
+
   return (
-    <div className="min-h-screen bg-[#050816] text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-200">
+      {showNavbar && (
+        <Navbar
+          user={user}
+          openLogin={() => setShowLogin(true)}
+        />
+      )}
 
-      <Navbar
-        user={user}
-        openLogin={() => setShowLogin(true)}
-      />
-
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      <main className="w-full">
         <Routes>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<Home />} />
-
+          <Route
+            path="/"
+            element={
+              user ? <Navigate to="/dashboard" replace /> : <Navigate to="/home" replace />
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              user ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <Home openLogin={() => setShowLogin(true)} />
+              )
+            }
+          />
           <Route
             path="/dashboard"
             element={
