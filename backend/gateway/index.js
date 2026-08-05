@@ -10,8 +10,16 @@ import { isAuth } from "./middleware/isAuth.js";
 const app = express();
 app.use(express.json())
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, postman, curl)
+        // or matching localhost origins on any port for development
+        if (!origin || origin.startsWith("http://localhost:")) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true
 }))
 
 app.use(cookieParser())

@@ -66,11 +66,7 @@ const App = () => {
           <Route
             path="/home"
             element={
-              user ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
-                <Home openLogin={() => setShowLogin(true)} />
-              )
+              <Home user={user} openLogin={() => setShowLogin(true)} />
             }
           />
           <Route

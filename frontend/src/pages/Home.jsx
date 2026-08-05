@@ -114,7 +114,15 @@ const RadarChart = ({ data, size = 180 }) => {
   );
 };
 
-const Home = ({ openLogin }) => {
+const Home = ({ user, openLogin }) => {
+  const getUserInitials = (name) => {
+    if (!name) return "U";
+    const parts = name.split(" ");
+    if (parts.length > 1) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return parts[0][0].toUpperCase();
+  };
   return (
     <div className="relative min-h-screen bg-slate-50 overflow-hidden flex flex-col items-center justify-start font-sans">
       {/* Soft Background Glows */}
@@ -201,7 +209,9 @@ const Home = ({ openLogin }) => {
                 <div className="bg-[#1c1c1f] rounded-lg p-2.5 flex items-center justify-between border border-white/5 mb-3">
                   <div>
                     <span className="text-[8px] text-gray-400 font-semibold block uppercase">Interview Coins</span>
-                    <span className="text-xs font-extrabold text-white">3590</span>
+                    <span className="text-xs font-extrabold text-white">
+                      {user ? (user.interviewCoin !== undefined ? user.interviewCoin : 3590) : 3590}
+                    </span>
                   </div>
                   <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-white text-xs font-bold">+</div>
                 </div>
@@ -209,11 +219,15 @@ const Home = ({ openLogin }) => {
                 <div className="flex items-center justify-between border-t border-white/5 pt-3">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xs font-bold font-sans">
-                      AS
+                      {user ? getUserInitials(user.name) : "U"}
                     </div>
                     <div>
-                      <span className="text-xs font-bold text-white block leading-tight">Ankush Sahu</span>
-                      <span className="text-[9px] text-gray-500 block leading-none">ankush@gmail.com</span>
+                      <span className="text-xs font-bold text-white block leading-tight">
+                        {user ? user.name : "User"}
+                      </span>
+                      <span className="text-[9px] text-gray-500 block leading-none">
+                        {user ? user.email : "user@gmail.com"}
+                      </span>
                     </div>
                   </div>
                   <LogOut size={12} className="text-gray-500" />
@@ -224,7 +238,9 @@ const Home = ({ openLogin }) => {
             {/* Main Content Mock */}
             <main className="flex-1 bg-[#09090b] p-6 overflow-hidden flex flex-col justify-start">
               <span className="text-[10px] text-gray-500 font-semibold uppercase block leading-none mb-1">Overview</span>
-              <h2 className="text-lg font-extrabold text-white flex items-center gap-1.5 mb-5 leading-none">Hello, Ankush 👋</h2>
+              <h2 className="text-lg font-extrabold text-white flex items-center gap-1.5 mb-5 leading-none">
+                Hello, {user ? user.name.split(" ")[0] : "User"} 👋
+              </h2>
 
               {/* Stats Box Grid */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">

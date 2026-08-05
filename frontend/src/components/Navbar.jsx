@@ -36,19 +36,27 @@ const Navbar = ({ user, openLogin }) => {
         {/* Action Button */}
         {user ? (
           <div className="flex items-center gap-4">
+            <div className="hidden sm:flex flex-col text-right font-sans">
+              <span className="text-sm font-extrabold text-slate-800 leading-tight">
+                {user.name || "User"}
+              </span>
+              <span className="text-[10px] text-slate-400 font-bold leading-none">
+                Logged In
+              </span>
+            </div>
             <button
               onClick={() => navigate("/dashboard")}
-              className="flex items-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 px-5 py-2.5 font-semibold text-slate-800 transition duration-300 shadow-sm"
+              className="flex items-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 px-4 py-2.5 font-semibold text-slate-800 transition duration-300 shadow-sm text-sm"
             >
-              <LayoutDashboard size={18} />
-              <span className="hidden sm:inline">Dashboard</span>
+              <LayoutDashboard size={15} />
+              <span>Dashboard</span>
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 rounded-xl bg-red-50 hover:bg-red-100 px-5 py-2.5 font-semibold text-red-600 transition duration-300"
+              className="flex items-center gap-2 rounded-xl bg-red-50 hover:bg-red-100 px-4 py-2.5 font-semibold text-red-600 transition duration-300 text-sm"
             >
-              <LogOut size={18} />
-              <span className="hidden sm:inline">Logout</span>
+              <LogOut size={15} />
+              <span>Logout</span>
             </button>
           </div>
         ) : (

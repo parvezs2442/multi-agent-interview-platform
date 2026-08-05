@@ -142,9 +142,9 @@ const Dashboard = ({ user }) => {
     return parts[0][0].toUpperCase();
   };
 
-  const name = user?.name || "Ankush Sahu";
-  const email = user?.email || "ankush23102002@gmail.com";
-  const coins = user?.interviewCoin !== undefined ? user.interviewCoin : 3590;
+  const name = user?.name || "User";
+  const email = user?.email || "user@gmail.com";
+  const coins = user?.interviewCoin !== undefined ? user.interviewCoin : 150;
 
   const sidebarContent = (isMobile = false) => (
     <div className="h-full flex flex-col justify-between py-5 px-4 font-sans select-none">
