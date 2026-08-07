@@ -12,4 +12,4 @@ const extractText = async(filePath) => {
 
 
 
-export default extractText
+export default extractText;
