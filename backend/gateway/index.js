@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", proxy(process.env.AUTH_API_URL))
+app.use("/api/resume", proxy(process.env.RESUME_API_URL))
 app.get("/api/me",isAuth,  getCurrentUser)
 
 app.listen(PORT, () => {
